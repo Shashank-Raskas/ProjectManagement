@@ -52,11 +52,22 @@ function handleSelectProject(projectId) {
   });
 }
 
+function handleDeleteProject() {
+  setProjectsState(prevState => {
+    return {
+      ...prevState,                 //Creates a new array with only the projects that do not match the selected project.                         
+      selectedProjectId: undefined,        // project.id → ID of the current project in the loop.
+      projects: prevState.projects.filter(project => project.id !== prevState.selectedProjectId),// prevState.selectedProjectId → ID of the project that needs to be deleted.
+                                                                                    //! Condition: If a project’s id matches selectedProjectId, it gets removed from the new array.
+    };
+  });
+}
+
 const selectedProject = projectsState.projects.find(
   project => project.id === projectsState.selectedProjectId
 );
 
-let content = <SelectedProject project={selectedProject}/>;
+let content = <SelectedProject project={selectedProject} deleteProject={handleDeleteProject}/>;
 
 if(projectsState.selectedProjectId === null) {
   content = <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject}/>
